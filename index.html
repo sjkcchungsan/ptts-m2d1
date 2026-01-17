@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MODUL PTT1 2026 互动提交版</title>
+    <title>MODUL PTT1 2026 - 完整修正版</title>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <style>
         :root { --blue: #3498db; --green: #2ecc71; --red: #e74c3c; }
@@ -13,28 +13,32 @@
         h1 { font-size: 18px; text-align: center; color: #2c3e50; border-bottom: 2px solid var(--blue); padding-bottom: 10px; }
         .info-input { width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; margin-bottom: 10px; }
 
-        /* 笔画示范：使用 SVG 确保 100% 显示 */
+        /* 笔画示范图 */
         .stroke-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .demo-img { height: 70px; background: #fff9db; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 5px; border: 1px solid #ffeaa7; position: relative;}
+        .demo-img { height: 70px; background: #fff9db; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 5px; border: 1px solid #ffeaa7; }
         .stroke-svg { width: 50px; height: 50px; }
         
         .canvas-box { border: 2px solid #eee; border-radius: 8px; background: #fff; touch-action: none; width: 100%; aspect-ratio: 1/1; }
         canvas { width: 100%; height: 100%; }
 
-        /* 练习4：变色逻辑 */
+        /* 变色按钮 */
         .count-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px dashed #eee; }
-        .options { display: flex; gap: 15px; }
-        .opt-btn { width: 45px; height: 45px; border: 2px solid #ddd; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; transition: 0.3s; }
-        .opt-btn.active { background: var(--green); color: white; border-color: var(--green); transform: scale(1.1); }
+        .opt-btn { width: 45px; height: 45px; border: 2px solid #ddd; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        .opt-btn.active { background: var(--green); color: white; border-color: var(--green); }
 
-        /* 按钮与计数 */
         .btn-main { background: var(--green); color: white; border: none; padding: 18px; border-radius: 10px; width: 100%; font-size: 18px; font-weight: bold; margin-top: 10px; }
         .btn-clear { background: #bdc3c7; color: white; border: none; padding: 4px 10px; border-radius: 4px; font-size: 11px; margin-top: 5px; }
+        
+        .visitor-box { text-align: center; background: #333; color: white; padding: 5px; border-radius: 5px; margin-bottom: 10px; font-size: 12px; }
     </style>
 </head>
 <body>
 
 <div id="capture-area">
+    <div class="visitor-box">
+        访客统计：<img src="https://profile-counter.glitch.me/PTT1_STUDY_2026/count.svg" style="vertical-align: middle;">
+    </div>
+
     <h1>MODUL PTT1 SESI 2026</h1>
 
     <div class="card">
@@ -42,13 +46,13 @@
     </div>
 
     <div class="card">
-        <p><strong>1. 画一画并圈出出生月份：</strong></p>
+        <p><strong>1. 画一画并点选出生月份：</strong></p>
         <div class="canvas-box" style="aspect-ratio: 1.6/1;"><canvas id="c_cake"></canvas></div>
         <button class="btn-clear" onclick="clearC('c_cake')">清除重画</button>
         <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:5px; margin-top:10px;">
             <script>
                 const mths = ["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"];
-                mths.forEach(m => document.write(`<div style="border:1px solid #eee; font-size:11px; text-align:center; padding:5px; border-radius:4px;" onclick="this.style.background='#ffeaa7'; this.style.borderColor='#fbc02d'">${m}</div>`));
+                mths.forEach(m => document.write(`<div style="border:1px solid #eee; font-size:11px; text-align:center; padding:5px; border-radius:4px;" onclick="this.style.background='#ffeaa7'">${m}</div>`));
             </script>
         </div>
     </div>
@@ -57,33 +61,25 @@
         <p><strong>2 & 3. 笔画练习 (跟着红色例子写)：</strong></p>
         <div class="stroke-grid">
             <div class="stroke-box">
-                <div class="demo-img">
-                    <svg class="stroke-svg" viewBox="0 0 100 100"><path d="M20 80 L80 30" stroke="#e74c3c" stroke-width="8" fill="none" stroke-linecap="round"/><path d="M70 30 L80 30 L80 40" stroke="#e74c3c" stroke-width="4" fill="none"/></svg>
-                </div>
+                <div class="demo-img"><svg class="stroke-svg" viewBox="0 0 100 100"><path d="M25 75 L75 35 M65 35 L75 35 L75 45" stroke="#e74c3c" stroke-width="8" fill="none" stroke-linecap="round"/></svg></div>
                 <small>提 (tí)</small>
                 <div class="canvas-box"><canvas id="c_ti"></canvas></div>
                 <button class="btn-clear" onclick="clearC('c_ti')">擦除</button>
             </div>
             <div class="stroke-box">
-                <div class="demo-img">
-                    <svg class="stroke-svg" viewBox="0 0 100 100"><path d="M50 20 L50 80 L35 65" stroke="#e74c3c" stroke-width="8" fill="none" stroke-linecap="round"/></svg>
-                </div>
+                <div class="demo-img"><svg class="stroke-svg" viewBox="0 0 100 100"><path d="M50 20 L50 80 L35 65" stroke="#e74c3c" stroke-width="8" fill="none" stroke-linecap="round"/></svg></div>
                 <small>竖钩 (shù gōu)</small>
                 <div class="canvas-box"><canvas id="c_sg"></canvas></div>
                 <button class="btn-clear" onclick="clearC('c_sg')">擦除</button>
             </div>
             <div class="stroke-box">
-                <div class="demo-img">
-                    <svg class="stroke-svg" viewBox="0 0 100 100"><path d="M20 30 L80 30 L80 80" stroke="#e74c3c" stroke-width="8" fill="none" stroke-linecap="round"/></svg>
-                </div>
+                <div class="demo-img"><svg class="stroke-svg" viewBox="0 0 100 100"><path d="M20 35 L80 35 L80 80" stroke="#e74c3c" stroke-width="8" fill="none" stroke-linecap="round"/></svg></div>
                 <small>横折 (héng zhé)</small>
                 <div class="canvas-box"><canvas id="c_hz"></canvas></div>
                 <button class="btn-clear" onclick="clearC('c_hz')">擦除</button>
             </div>
             <div class="stroke-box">
-                <div class="demo-img">
-                    <svg class="stroke-svg" viewBox="0 0 100 100"><path d="M30 20 L30 80 L70 50" stroke="#e74c3c" stroke-width="8" fill="none" stroke-linecap="round"/></svg>
-                </div>
+                <div class="demo-img"><svg class="stroke-svg" viewBox="0 0 100 100"><path d="M35 20 L35 80 L75 50" stroke="#e74c3c" stroke-width="8" fill="none" stroke-linecap="round"/></svg></div>
                 <small>竖提 (shù tí)</small>
                 <div class="canvas-box"><canvas id="c_st"></canvas></div>
                 <button class="btn-clear" onclick="clearC('c_st')">擦除</button>
@@ -93,78 +89,64 @@
 
     <div class="card">
         <p><strong>4. 数一数并点选正确答案：</strong></p>
-        <div class="count-row">
-            <span>⭐⭐</span>
-            <div class="options"><div class="opt-btn" onclick="act(this)">2</div><div class="opt-btn" onclick="act(this)">3</div></div>
-        </div>
-        <div class="count-row">
-            <span>🍎🍎🍎🍎🍎🍎</span>
-            <div class="options"><div class="opt-btn" onclick="act(this)">6</div><div class="opt-btn" onclick="act(this)">4</div></div>
-        </div>
-        <div class="count-row">
-            <span>🍀🍀🍀🍀🍀</span>
-            <div class="options"><div class="opt-btn" onclick="act(this)">7</div><div class="opt-btn" onclick="act(this)">5</div></div>
-        </div>
+        <div class="count-row"><span>⭐⭐</span><div style="display:flex;gap:10px;"><div class="opt-btn" onclick="act(this)">2</div><div class="opt-btn" onclick="act(this)">3</div></div></div>
+        <div class="count-row"><span>🍎🍎🍎🍎🍎🍎</span><div style="display:flex;gap:10px;"><div class="opt-btn" onclick="act(this)">6</div><div class="opt-btn" onclick="act(this)">4</div></div></div>
+        <div class="count-row"><span>🐞🐞🐞🐞🐞</span><div style="display:flex;gap:10px;"><div class="opt-btn" onclick="act(this)">7</div><div class="opt-btn" onclick="act(this)">5</div></div></div>
     </div>
 
     <div class="card">
-        <p><strong>5. 数一数写出数字：</strong></p>
-        <div style="background:#f9f9f9; padding:10px; text-align:center; font-size:20px;">
-            🌸🌸🌸🌸 | 🐦🐦🐦 | 🐌🐌🐌🐌🐌
+        <p><strong>5. 数一数并写出数字：</strong></p>
+        <div style="background:#f0f4f8; padding:15px; border-radius:10px; text-align:center; font-size:22px; line-height:2;">
+            🌸🌸🌸🌸<br>🐦🐦🐦<br>🐌🐌🐌🐌🐌
         </div>
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px;">
-            <div>🌸: <input type="number" style="width:50px; padding:5px;"></div>
-            <div>🐦: <input type="number" style="width:50px; padding:5px;"></div>
+            <div style="background:#fff; padding:10px; border:1px solid #ddd; border-radius:5px;">🌸: <input type="number" style="width:40px;"></div>
+            <div style="background:#fff; padding:10px; border:1px solid #ddd; border-radius:5px;">🐦: <input type="number" style="width:40px;"></div>
+            <div style="background:#fff; padding:10px; border:1px solid #ddd; border-radius:5px;">🐌: <input type="number" style="width:40px;"></div>
         </div>
     </div>
 </div>
 
-<button class="btn-main" onclick="downloadWork()">完成作业并保存照片</button>
+<button class="btn-main" onclick="saveAsImg()">完成作业 (自动保存/下载)</button>
 
 <script>
-    function setupC(id) {
+    function setupCanvas(id) {
         const c = document.getElementById(id); const ctx = c.getContext('2d');
         const r = c.parentNode.getBoundingClientRect();
         c.width = r.width; c.height = r.height;
-        let dr = false;
-        const gp = (e) => {
-            const re = c.getBoundingClientRect();
+        let drawing = false;
+        const getP = (e) => {
+            const rect = c.getBoundingClientRect();
             const cx = e.touches ? e.touches[0].clientX : e.clientX;
             const cy = e.touches ? e.touches[0].clientY : e.clientY;
-            return { x: cx - re.left, y: cy - re.top };
+            return { x: cx - rect.left, y: cy - rect.top };
         };
-        const st = (e) => { dr = true; draw(e); };
-        const ed = () => { dr = false; ctx.beginPath(); };
+        const start = (e) => { drawing = true; draw(e); };
+        const end = () => { drawing = false; ctx.beginPath(); };
         const draw = (e) => {
-            if(!dr) return; e.preventDefault();
-            const p = gp(e);
-            ctx.lineWidth = 4; ctx.lineCap = 'round'; ctx.strokeStyle = '#000';
+            if(!drawing) return; e.preventDefault();
+            const p = getP(e);
+            ctx.lineWidth = 4; ctx.lineCap = 'round'; ctx.strokeStyle = '#2c3e50';
             ctx.lineTo(p.x, p.y); ctx.stroke(); ctx.beginPath(); ctx.moveTo(p.x, p.y);
         };
-        c.addEventListener('touchstart', st); c.addEventListener('touchmove', draw); c.addEventListener('touchend', ed);
-        c.addEventListener('mousedown', st); c.addEventListener('mousemove', draw); window.addEventListener('mouseup', ed);
+        c.addEventListener('touchstart', start); c.addEventListener('touchmove', draw); c.addEventListener('touchend', end);
+        c.addEventListener('mousedown', start); c.addEventListener('mousemove', draw); window.addEventListener('mouseup', end);
     }
 
     function clearC(id) { document.getElementById(id).getContext('2d').clearRect(0,0,1000,1000); }
-    
-    // 变色逻辑
-    function act(el) {
-        Array.from(el.parentElement.children).forEach(b => b.classList.remove('active'));
-        el.classList.add('active');
-    }
+    function act(el) { Array.from(el.parentElement.children).forEach(b => b.classList.remove('active')); el.classList.add('active'); }
 
-    // 自动保存
-    function downloadWork() {
+    function saveAsImg() {
         html2canvas(document.querySelector("#capture-area")).then(canvas => {
             const link = document.createElement('a');
-            link.download = 'PTT1_Homework.png';
+            link.download = 'My_Modul_PTT1.png';
             link.href = canvas.toDataURL();
             link.click();
-            alert("照片已准备好下载，请在相册或下载文件夹中查看。");
+            alert("正在保存图片，请查看手机下载管理或相册。");
         });
     }
 
-    window.onload = () => { ['c_cake','c_ti','c_sg','c_hz','c_st'].forEach(setupC); };
+    window.onload = () => { ['c_cake','c_ti','c_sg','c_hz','c_st'].forEach(setupCanvas); };
 </script>
 </body>
 </html>
