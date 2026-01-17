@@ -3,132 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MODUL PTT1 2026 - 互动提交版</title>
+    <title>MODUL PTT1 2026 - 完整互动版</title>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <style>
         :root { --blue: #3498db; --green: #2ecc71; --red: #e74c3c; }
-        body { font-family: sans-serif; background: #f4f7f6; margin: 0; padding: 10px; }
-        #capture-area { background: #f4f7f6; padding: 10px; }
-        .card { background: white; border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        h1 { font-size: 18px; text-align: center; color: #2c3e50; }
+        body { font-family: sans-serif; background: #f0f4f8; margin: 0; padding: 10px; }
+        #capture-area { background: #f0f4f8; padding: 15px; border-radius: 10px; }
+        .card { background: white; border-radius: 15px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        h1 { font-size: 22px; text-align: center; color: #2c3e50; margin-bottom: 20px; border-bottom: 2px solid var(--blue); padding-bottom: 10px; }
+        h2 { font-size: 16px; color: var(--blue); margin-top: 0; }
         
-        /* 姓名输入 */
-        .info-input { width: 100%; padding: 10px; margin-bottom: 10px; border: 2px solid var(--blue); border-radius: 8px; box-sizing: border-box; font-size: 16px; }
+        /* 学生信息 */
+        .info-input { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; margin-bottom: 10px; }
 
-        /* 笔画例子 */
-        .stroke-example { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; background: #fff9db; padding: 8px; border-radius: 8px; }
-        .stroke-demo { width: 50px; height: 50px; border: 1px solid #ccc; background: white; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; color: var(--red); }
+        /* 笔画练习样式 */
+        .stroke-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px; }
+        .stroke-item { text-align: center; }
+        .stroke-demo-box { height: 60px; display: flex; align-items: center; justify-content: center; background: #fff9db; border-radius: 8px; margin-bottom: 5px; }
+        /* 模拟部首笔画例子 */
+        .biahua-img { font-size: 40px; color: var(--red); font-family: "KaiTi", "楷体"; font-weight: bold; }
         
-        /* 画板 */
-        .canvas-box { border: 2px solid #eee; border-radius: 8px; background: #fff; touch-action: none; width: 100%; aspect-ratio: 1.5/1; }
+        .canvas-box { border: 2px solid #eee; border-radius: 8px; background: #fff; touch-action: none; width: 100%; aspect-ratio: 1/1; }
         canvas { width: 100%; height: 100%; }
-        
-        /* 按钮 */
-        .btn-main { background: var(--green); color: white; border: none; padding: 15px; border-radius: 8px; width: 100%; font-size: 18px; font-weight: bold; margin-top: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .btn-clear { background: #95a5a6; color: white; border: none; padding: 5px 10px; border-radius: 4px; margin-top: 5px; font-size: 12px; }
 
-        .month-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
-        .month { border: 1px solid #ddd; padding: 8px; font-size: 11px; text-align: center; border-radius: 5px; }
-        .month.active { background: #ffeaa7; border-color: #fdcb6e; }
+        /* 练习4：数一数并彩上答案 */
+        .color-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px dashed #eee; }
+        .num-btns { display: flex; gap: 10px; }
+        .n-opt { width: 35px; height: 35px; border: 2px solid #ddd; display: flex; align-items: center; justify-content: center; border-radius: 50%; cursor: pointer; }
+        .n-opt.selected { background: var(--green); color: white; border-color: var(--green); }
 
-        /* 计数练习 */
-        .count-img { font-size: 20px; background: #eee; padding: 10px; border-radius: 8px; letter-spacing: 3px; }
+        /* 练习5：数一数并写数字 */
+        .count-write-box { background: #eef2f7; padding: 15px; border-radius: 10px; text-align: center; font-size: 24px; line-height: 1.8; letter-spacing: 5px; }
+        .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .input-item { background: #fff; padding: 8px; border-radius: 5px; border: 1px solid #ddd; font-size: 14px; }
+        input[type="number"] { width: 45px; padding: 5px; border: 1px solid var(--blue); }
+
+        .btn-main { background: var(--green); color: white; border: none; padding: 18px; border-radius: 10px; width: 100%; font-size: 18px; font-weight: bold; margin: 20px 0; }
+        .btn-clear { background: #bdc3c7; color: white; border: none; padding: 4px 10px; border-radius: 4px; font-size: 11px; margin-top: 4px; }
     </style>
 </head>
 <body>
 
     <div id="capture-area">
-        <div class="visitor-counter" style="text-align:center;">
-            <img src="https://profile-counter.glitch.me/PTT1_2026_STUDY/count.svg" alt="Count">
-        </div>
-
-        <h1>MODUL PTT1 SESI 2026 [cite: 4]</h1>
+        <h1>MODUL PTT1 SESI 2026</h1>
 
         <div class="card">
-            <input type="text" class="info-input" placeholder="输入学生姓名 (Nama Student)">
-            <input type="text" class="info-input" placeholder="班级 (Kelas)">
+            <input type="text" class="info-input" placeholder="输入姓名 (Nama Student)">
         </div>
 
         <div class="card">
-            <p><strong>1. 连线与生日月份</strong> [cite: 1, 3]</p>
-            <div class="canvas-box" id="boxCake"><canvas id="c_cake"></canvas></div>
-            <button class="btn-clear" onclick="clearC('c_cake')">擦除</button>
-            <div class="month-grid" style="margin-top:10px;">
+            <h2>1. 画一画蛋糕并点击生日月份</h2>
+            <div class="canvas-box" style="aspect-ratio: 1.5/1;"><canvas id="c_cake"></canvas></div>
+            <button class="btn-clear" onclick="clearC('c_cake')">重画</button>
+            <div style="display:grid; grid-template-columns: repeat(4,1fr); gap:5px; margin-top:10px;">
                 <script>
-                    const ms = ["Jan", "Feb", "Mac", "Apr", "Mei", "Jun", "Jul", "Ogos", "Sep", "Okt", "Nov", "Dis"];
-                    ms.forEach(m => document.write(`<div class="month" onclick="this.classList.toggle('active')">${m}</div>`));
+                    const mths = ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"];
+                    mths.forEach(m => document.write(`<div style="font-size:12px; border:1px solid #ddd; padding:5px; text-align:center; border-radius:4px;" onclick="this.style.background='#ffeaa7'">${m}</div>`));
                 </script>
             </div>
         </div>
 
         <div class="card">
-            <p><strong>2. 笔画练习 (跟着例子写)</strong> [cite: 5, 6, 9, 12, 14, 16]</p>
-            
-            <div class="stroke-example">
-                <div class="stroke-demo">提</div>
-                <p>例子 (tí): 向上斜画 [cite: 7, 8, 17]</p>
+            <h2>2 & 3. 笔画练习 (跟着红色例子写)</h2>
+            <div class="stroke-container">
+                <div class="stroke-item">
+                    <div class="stroke-demo-box"><span class="biahua-img">㇀</span></div>
+                    <p style="font-size:12px; margin:2px;">提 (tí)</p>
+                    <div class="canvas-box"><canvas id="c_ti"></canvas></div>
+                    <button class="btn-clear" onclick="clearC('c_ti')">擦除</button>
+                </div>
+                <div class="stroke-item">
+                    <div class="stroke-demo-box"><span class="biahua-img">亅</span></div>
+                    <p style="font-size:12px; margin:2px;">竖钩 (shù gōu)</p>
+                    <div class="canvas-box"><canvas id="c_sg"></canvas></div>
+                    <button class="btn-clear" onclick="clearC('c_sg')">擦除</button>
+                </div>
+                <div class="stroke-item">
+                    <div class="stroke-demo-box"><span class="biahua-img">㇕</span></div>
+                    <p style="font-size:12px; margin:2px;">横折 (héng zhé)</p>
+                    <div class="canvas-box"><canvas id="c_hz"></canvas></div>
+                    <button class="btn-clear" onclick="clearC('c_hz')">擦除</button>
+                </div>
+                <div class="stroke-item">
+                    <div class="stroke-demo-box"><span class="biahua-img">㇄</span></div>
+                    <p style="font-size:12px; margin:2px;">竖提 (shù tí)</p>
+                    <div class="canvas-box"><canvas id="c_st"></canvas></div>
+                    <button class="btn-clear" onclick="clearC('c_st')">擦除</button>
+                </div>
             </div>
-            <div class="canvas-box"><canvas id="c_ti"></canvas></div>
-            <button class="btn-clear" onclick="clearC('c_ti')">擦除</button>
-
-            <div class="stroke-example" style="margin-top:15px;">
-                <div class="stroke-demo">亅</div>
-                <p>例子 (shù gōu): 向下再勾 [cite: 10]</p>
-            </div>
-            <div class="canvas-box"><canvas id="c_shugou"></canvas></div>
-            <button class="btn-clear" onclick="clearC('c_shugou')">擦除</button>
-
-            <div class="stroke-example" style="margin-top:15px;">
-                <div class="stroke-demo">ㄱ</div>
-                <p>例子 (héng zhé): 向右再折 [cite: 15]</p>
-            </div>
-            <div class="canvas-box"><canvas id="c_hengzhe"></canvas></div>
-            <button class="btn-clear" onclick="clearC('c_hengzhe')">擦除</button>
         </div>
 
         <div class="card">
-            <p><strong>3. 数一数并填写数字</strong> [cite: 19, 22, 23]</p>
-            <div class="count-img">🌸🌸🌸🌸🌸<br>🐰🐰🐰<br>🐞🐞🐞🐞</div>
-            <div style="margin-top:10px;">
-                🌸: <input type="number" style="width:40px;"> 
-                🐰: <input type="number" style="width:40px;"> 
-                🐞: <input type="number" style="width:40px;">
+            <h2>4. 数一数并点选(彩上)正确的答案</h2>
+            <div class="color-row">
+                <span>🌟🌟🌟</span>
+                <div class="num-btns"><div class="n-opt" onclick="sel(this)">2</div><div class="n-opt" onclick="sel(this)">3</div></div>
+            </div>
+            <div class="color-row">
+                <span>🍀🍀🍀🍀🍀🍀</span>
+                <div class="num-btns"><div class="n-opt" onclick="sel(this)">6</div><div class="n-opt" onclick="sel(this)">4</div></div>
             </div>
         </div>
+
+        <div class="card">
+            <h2>5. 数一数并在盒子里写上数字</h2>
+            <div class="count-write-box">
+                🌸🌸🌸<br>🐦🐦🐦🐦<br>🐌🐌<br>🐰🐰🐰🐰🐰
+            </div>
+            <div class="input-grid">
+                <div class="input-item">🌸 鲜花: <input type="number"></div>
+                <div class="input-item">🐦 小鸟: <input type="number"></div>
+                <div class="input-item">🐌 蜗牛: <input type="number"></div>
+                <div class="input-item">🐰 兔子: <input type="number"></div>
+            </div>
+        </div>
+
+        <div style="text-align:center; font-size:10px; color:#aaa;">Visitor Counter: <img src="https://profile-counter.glitch.me/PTT1_STUDY_2026/count.svg" style="vertical-align:middle;"></div>
     </div>
 
-    <button class="btn-main" onclick="takeScreenshot()">生成作业照片 (Capture to Image)</button>
-    <p style="text-align:center; color:#888; font-size:12px;">生成后长按保存图片发给老师</p>
-
-    <div id="result-img" style="text-align:center; margin-top:20px;"></div>
+    <button class="btn-main" onclick="saveImg()">完成作业 (生成照片给老师)</button>
+    <div id="output"></div>
 
     <script>
         function setupC(id) {
-            const c = document.getElementById(id);
-            const ctx = c.getContext('2d');
+            const c = document.getElementById(id); const ctx = c.getContext('2d');
             const r = c.parentNode.getBoundingClientRect();
             c.width = r.width; c.height = r.height;
             let drawing = false;
-
             const getPos = (e) => {
                 const rect = c.getBoundingClientRect();
-                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-                return { x: clientX - rect.left, y: clientY - rect.top };
+                const cx = e.touches ? e.touches[0].clientX : e.clientX;
+                const cy = e.touches ? e.touches[0].clientY : e.clientY;
+                return { x: cx - rect.left, y: cy - rect.top };
             };
-
             const start = (e) => { drawing = true; draw(e); };
             const stop = () => { drawing = false; ctx.beginPath(); };
             const draw = (e) => {
-                if(!drawing) return;
-                e.preventDefault();
+                if(!drawing) return; e.preventDefault();
                 const p = getPos(e);
                 ctx.lineWidth = 4; ctx.lineCap = 'round'; ctx.strokeStyle = '#000';
                 ctx.lineTo(p.x, p.y); ctx.stroke(); ctx.beginPath(); ctx.moveTo(p.x, p.y);
             };
-
-            c.addEventListener('mousedown', start); c.addEventListener('mousemove', draw); window.addEventListener('mouseup', stop);
             c.addEventListener('touchstart', start); c.addEventListener('touchmove', draw); c.addEventListener('touchend', stop);
+            c.addEventListener('mousedown', start); c.addEventListener('mousemove', draw); window.addEventListener('mouseup', stop);
         }
 
         function clearC(id) {
@@ -136,19 +153,21 @@
             c.getContext('2d').clearRect(0,0,c.width,c.height);
         }
 
-        // 截图功能
-        function takeScreenshot() {
+        function sel(el) {
+            const parent = el.parentElement;
+            Array.from(parent.children).forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+        }
+
+        function saveImg() {
             html2canvas(document.querySelector("#capture-area")).then(canvas => {
                 const img = canvas.toDataURL("image/png");
-                const resultDiv = document.getElementById('result-img');
-                resultDiv.innerHTML = `<h3>生成的作业图 (长按保存):</h3><img src="${img}" style="width:100%; border:2px solid #333;">`;
+                document.getElementById('output').innerHTML = `<h3>长按下方图片保存发送：</h3><img src="${img}" style="width:100%; border:2px solid #3498db; border-radius:10px;">`;
                 window.scrollTo(0, document.body.scrollHeight);
             });
         }
 
-        window.onload = () => {
-            ['c_cake', 'c_ti', 'c_shugou', 'c_hengzhe'].forEach(setupC);
-        };
+        window.onload = () => { ['c_cake','c_ti','c_sg','c_hz','c_st'].forEach(setupC); };
     </script>
 </body>
 </html>
