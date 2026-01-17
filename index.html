@@ -3,187 +3,164 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>2026 模块 PTT1 居家学习版</title>
+    <title>MODUL PTT1 2026 互动学习版</title>
     <style>
-        :root { --primary: #4a90e2; --bg: #f5f7fa; }
-        body { font-family: -apple-system, "Helvetica Neue", sans-serif; background: var(--bg); margin: 0; padding: 15px; color: #333; }
-        .card { background: white; border-radius: 15px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        h1, h2 { color: var(--primary); text-align: center; margin-top: 0; }
-        p { line-height: 1.5; color: #666; font-size: 14px; }
+        :root { --blue: #3498db; --green: #2ecc71; --red: #e74c3c; --bg: #fdfdfd; }
+        body { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; background: #f0f2f5; margin: 0; padding: 10px; -webkit-user-select: none; }
+        .card { background: white; border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        h1 { font-size: 20px; color: #2c3e50; text-align: center; margin: 10px 0; }
+        h2 { font-size: 16px; border-left: 4px solid var(--blue); padding-left: 8px; margin: 15px 0 10px; }
+        p { font-size: 14px; color: #555; margin: 5px 0; }
         
-        /* 计数器样式 */
-        .counter { text-align: center; margin-bottom: 20px; font-size: 12px; color: #999; }
+        /* 计数器 */
+        .visitor-counter { text-align: center; font-size: 12px; color: #888; margin-bottom: 10px; }
+        
+        /* 画板 */
+        .canvas-box { position: relative; border: 2px solid #eee; border-radius: 8px; background: #fff; touch-action: none; width: 100%; aspect-ratio: 1.2/1; }
+        canvas { width: 100%; height: 100%; }
+        .example-img { display: block; margin: 5px auto; height: 40px; }
+        .btn-clear { background: var(--red); color: white; border: none; padding: 8px 15px; border-radius: 5px; width: 100%; margin-top: 5px; }
 
-        /* 画板样式 - 针对手机优化 */
-        .canvas-container { position: relative; width: 100%; aspect-ratio: 4/3; background: #fff; border: 2px dashed #ccc; border-radius: 10px; overflow: hidden; touch-action: none; }
-        canvas { width: 100%; height: 100%; display: block; }
-        .btn-group { display: flex; gap: 10px; margin-top: 10px; }
-        button { flex: 1; padding: 12px; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; transition: 0.2s; }
-        .btn-clear { background: #ff4757; color: white; }
-        .btn-save { background: #2ed573; color: white; }
+        /* 月份 */
+        .month-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+        .month { padding: 10px; border: 1px solid #ddd; border-radius: 6px; text-align: center; font-size: 12px; }
+        .month.active { background: #ffeaa7; border-color: #fdcb6e; }
 
-        /* 月份网格 */
-        .month-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
-        .month-item { padding: 15px 5px; border: 1.5px solid #eee; border-radius: 8px; text-align: center; font-size: 13px; }
-        .month-item.active { background: #fff9db; border-color: #fab005; font-weight: bold; }
+        /* 数一数填色区 (Page 4) */
+        .choice-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid #eee; }
+        .visual-items { flex-grow: 1; font-size: 18px; letter-spacing: 2px; }
+        .num-option { border: 2px solid #ddd; padding: 5px 12px; border-radius: 5px; cursor: pointer; }
+        .num-option.correct { background: var(--green); color: white; border-color: var(--green); }
 
-        /* 计数练习区 */
-        .count-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; }
-        .count-item:last-child { border-bottom: none; }
-        .count-label { font-size: 20px; }
-        input[type="number"] { width: 60px; padding: 10px; border: 2px solid #ddd; border-radius: 8px; text-align: center; font-size: 16px; }
-
-        .footer { text-align: center; padding: 20px; font-size: 12px; color: #ccc; }
+        /* 物体清点区 (Page 5) */
+        .insect-box { background: #f9f9f9; padding: 10px; border-radius: 10px; text-align: center; font-size: 24px; line-height: 1.5; letter-spacing: 5px; margin-bottom: 10px; }
+        .input-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; }
+        input[type="number"] { width: 50px; padding: 8px; border: 2px solid var(--blue); border-radius: 5px; text-align: center; }
     </style>
 </head>
 <body>
 
-    <div class="counter">
-        <p>访问人数：</p>
-        <img src="https://profile-counter.glitch.me/YOUR_GITHUB_NAME/count.svg" alt="Visitor Count">
+    <div class="visitor-counter">
+        <p>访客计数：</p>
+        <img src="https://profile-counter.glitch.me/PTT1_2026_STUDY/count.svg" alt="Count">
     </div>
 
-    <h1>MODUL PTT1 (2026)</h1>
+    <h1>MODUL PTT1 SESI 2026</h1>
 
     <div class="card">
-        <h2>第 1 页：我的生日</h2>
-        <p>1. 画出蛋糕并连线 ：</p>
-        <div class="canvas-container" id="cakeContainer">
-            <canvas id="cakeCanvas"></canvas>
+        <h2>1. 连线与生日月份 [cite: 1, 3]</h2>
+        <p>画出蛋糕并点击圈出你的出生月份：</p>
+        <div class="canvas-box">
+            <canvas id="canvasCake"></canvas>
         </div>
-        <div class="btn-group">
-            <button class="btn-clear" onclick="clearCanvas('cakeCanvas')">清除重画</button>
-        </div>
+        <button class="btn-clear" onclick="clearC('canvasCake')">清除</button>
 
-        <p style="margin-top:20px;">2. 圈出你出生的月份 [cite: 1, 3]：</p>
-        <div class="month-grid" id="monthGrid">
+        <div class="month-grid" style="margin-top:15px;">
             <script>
-                const months = [
-                    {m: "一月", e: "Jan"}, {m: "二月", e: "Feb"}, {m: "三月", e: "Mar"}, {m: "四月", e: "Apr"},
-                    {m: "五月", e: "Mei"}, {m: "六月", e: "Jun"}, {m: "七月", e: "Jul"}, {m: "八月", e: "Ogos"},
-                    {m: "九月", e: "Sep"}, {m: "十月", e: "Okt"}, {m: "十一月", e: "Nov"}, {m: "十二月", e: "Dis"}
-                ];
-                months.forEach(item => {
-                    document.write(`<div class="month-item" onclick="this.classList.toggle('active')">${item.m}<br><small>${item.e}</small></div>`);
-                });
+                const ms = ["Januari 一月", "Februari 二月", "Mac 三月", "April 四月", "Mei 五月", "Jun 六月", "Julai 七月", "Ogos 八月", "September 九月", "Oktober 十月", "November 十一月", "Disember 十二月"];
+                ms.forEach(m => document.write(`<div class="month" onclick="this.classList.toggle('active')">${m}</div>`));
             </script>
         </div>
     </div>
 
     <div class="card">
-        <h2>第 2-3 页：笔画练习 (写一写)</h2>
-        <p>请在下方方格内练习笔画 [cite: 5, 12, 16]：</p>
+        <h2>2. 笔画练习 (写一写) </h2>
+        <p>跟着例子在方格内写一写：</p>
         
-        <div style="text-align:center;">
-            <strong>提 (tí) [cite: 7, 8]</strong>
-            <div class="canvas-container" style="aspect-ratio: 1/1; width: 150px; margin: 10px auto;">
-                <canvas id="stroke1"></canvas>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+            <div>
+                <p>提 (tí) [cite: 8]</p>
+                <div class="canvas-box" style="aspect-ratio:1/1;"><canvas id="c1"></canvas></div>
+                <button class="btn-clear" onclick="clearC('c1')">清除</button>
             </div>
-            <button class="btn-clear" onclick="clearCanvas('stroke1')" style="width:150px; margin-bottom:20px;">清除</button>
-
-            <strong>竖钩 (shù gōu) [cite: 10]</strong>
-            <div class="canvas-container" style="aspect-ratio: 1/1; width: 150px; margin: 10px auto;">
-                <canvas id="stroke2"></canvas>
+            <div>
+                <p>竖钩 (shù gōu) [cite: 10]</p>
+                <div class="canvas-box" style="aspect-ratio:1/1;"><canvas id="c2"></canvas></div>
+                <button class="btn-clear" onclick="clearC('c2')">清除</button>
             </div>
-            <button class="btn-clear" onclick="clearCanvas('stroke2')" style="width:150px;">清除</button>
+            <div>
+                <p>横折 (héng zhé) [cite: 15]</p>
+                <div class="canvas-box" style="aspect-ratio:1/1;"><canvas id="c3"></canvas></div>
+                <button class="btn-clear" onclick="clearC('c3')">清除</button>
+            </div>
+            <div>
+                <p>竖提 (shù tí) [cite: 17]</p>
+                <div class="canvas-box" style="aspect-ratio:1/1;"><canvas id="c4"></canvas></div>
+                <button class="btn-clear" onclick="clearC('c4')">清除</button>
+            </div>
         </div>
     </div>
 
     <div class="card">
-        <h2>第 5 页：数一数</h2>
-        <p>根据图片内容，输入正确的数字 [cite: 22, 23]：</p>
+        <h2>3. 数一数并点选正确答案 </h2>
+        <p>数数有多少，点击正确的数字：</p>
         
-        <div class="count-item">
-            <span class="count-label">🌸 鲜花</span>
-            <input type="number" placeholder="?">
+        <div class="choice-row">
+            <div class="visual-items">⭐⭐⭐⭐</div>
+            <div class="num-option" onclick="this.classList.toggle('correct')">2</div>
+            <div class="num-option" onclick="this.classList.toggle('correct')">4</div>
         </div>
-        <div class="count-item">
-            <span class="count-label">🐦 小鸟</span>
-            <input type="number" placeholder="?">
-        </div>
-        <div class="count-item">
-            <span class="count-label">🐌 蜗牛</span>
-            <input type="number" placeholder="?">
-        </div>
-        <div class="count-item">
-            <span class="count-label">🐰 兔子</span>
-            <input type="number" placeholder="?">
-        </div>
-        <div class="count-item">
-            <span class="count-label">🐞 瓢虫</span>
-            <input type="number" placeholder="?">
-        </div>
-        <div class="count-item">
-            <span class="count-label">🦋 蝴蝶</span>
-            <input type="number" placeholder="?">
+        <div class="choice-row">
+            <div class="visual-items">🍎🍎🍎🍎🍎🍎</div>
+            <div class="num-option" onclick="this.classList.toggle('correct')">6</div>
+            <div class="num-option" onclick="this.classList.toggle('correct')">3</div>
         </div>
     </div>
 
-    <div class="footer">
-        2026 模块学习版 · 居家学习 (WFH)
+    <div class="card">
+        <h2>4. 数一数并写上正确的数字 </h2>
+        <p>看图数一数，把答案填在盒子里：</p>
+        
+        <div class="insect-box">
+            🌸🌸🌸🌸<br>
+            🐦🐦🐦<br>
+            🐌🐌🐌🐌🐌<br>
+            🐰🐰<br>
+            🐞🐞🐞🐞🐞🐞
+        </div>
+
+        <div class="input-row"><span>🌸 鲜花 (Bunga):</span> <input type="number"></div>
+        <div class="input-row"><span>🐦 小鸟 (Burung):</span> <input type="number"></div>
+        <div class="input-row"><span>🐌 蜗牛 (Siput):</span> <input type="number"></div>
+        <div class="input-row"><span>🐰 兔子 (Arnab):</span> <input type="number"></div>
+        <div class="input-row"><span>🐞 瓢虫 (Kumbang):</span> <input type="number"></div>
     </div>
 
     <script>
-        // 画布逻辑
-        function initCanvas(id) {
-            const canvas = document.getElementById(id);
-            const ctx = canvas.getContext('2d');
-            
-            // 调整分辨率
-            const rect = canvas.parentNode.getBoundingClientRect();
-            canvas.width = rect.width;
-            canvas.height = rect.height;
-
+        function setupC(id) {
+            const c = document.getElementById(id);
+            const ctx = c.getContext('2d');
+            const r = c.parentNode.getBoundingClientRect();
+            c.width = r.width; c.height = r.height;
             let drawing = false;
 
-            function start(e) {
-                drawing = true;
-                draw(e);
-            }
-
-            function end() {
-                drawing = false;
-                ctx.beginPath();
-            }
-
-            function draw(e) {
-                if (!drawing) return;
-                e.preventDefault();
-                
+            const getPos = (e) => {
+                const rect = c.getBoundingClientRect();
                 const clientX = e.touches ? e.touches[0].clientX : e.clientX;
                 const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-                const rect = canvas.getBoundingClientRect();
-                
-                ctx.lineWidth = 3;
-                ctx.lineCap = 'round';
-                ctx.strokeStyle = '#333';
+                return { x: clientX - rect.left, y: clientY - rect.top };
+            };
 
-                ctx.lineTo(clientX - rect.left, clientY - rect.top);
-                ctx.stroke();
-                ctx.beginPath();
-                ctx.moveTo(clientX - rect.left, clientY - rect.top);
-            }
+            const start = (e) => { drawing = true; draw(e); };
+            const stop = () => { drawing = false; ctx.beginPath(); };
+            const draw = (e) => {
+                if(!drawing) return;
+                e.preventDefault();
+                const p = getPos(e);
+                ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.strokeStyle = '#2c3e50';
+                ctx.lineTo(p.x, p.y); ctx.stroke(); ctx.beginPath(); ctx.moveTo(p.x, p.y);
+            };
 
-            canvas.addEventListener('mousedown', start);
-            canvas.addEventListener('mousemove', draw);
-            canvas.addEventListener('mouseup', end);
-            canvas.addEventListener('touchstart', start);
-            canvas.addEventListener('touchmove', draw);
-            canvas.addEventListener('touchend', end);
+            c.addEventListener('mousedown', start); c.addEventListener('mousemove', draw); window.addEventListener('mouseup', stop);
+            c.addEventListener('touchstart', start); c.addEventListener('touchmove', draw); c.addEventListener('touchend', stop);
         }
 
-        function clearCanvas(id) {
-            const canvas = document.getElementById(id);
-            const ctx = canvas.getContext('2d');
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        function clearC(id) {
+            const c = document.getElementById(id);
+            c.getContext('2d').clearRect(0,0,c.width,c.height);
         }
 
-        // 初始化所有画板
-        window.onload = () => {
-            initCanvas('cakeCanvas');
-            initCanvas('stroke1');
-            initCanvas('stroke2');
-        };
+        ['canvasCake', 'c1', 'c2', 'c3', 'c4'].forEach(setupC);
     </script>
 </body>
 </html>
