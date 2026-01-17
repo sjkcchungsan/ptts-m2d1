@@ -3,128 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MODUL PTT1 2026 互动学习版</title>
+    <title>MODUL PTT1 2026 - 互动提交版</title>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <style>
-        :root { --blue: #3498db; --green: #2ecc71; --red: #e74c3c; --bg: #fdfdfd; }
-        body { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; background: #f0f2f5; margin: 0; padding: 10px; -webkit-user-select: none; }
-        .card { background: white; border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-        h1 { font-size: 20px; color: #2c3e50; text-align: center; margin: 10px 0; }
-        h2 { font-size: 16px; border-left: 4px solid var(--blue); padding-left: 8px; margin: 15px 0 10px; }
-        p { font-size: 14px; color: #555; margin: 5px 0; }
+        :root { --blue: #3498db; --green: #2ecc71; --red: #e74c3c; }
+        body { font-family: sans-serif; background: #f4f7f6; margin: 0; padding: 10px; }
+        #capture-area { background: #f4f7f6; padding: 10px; }
+        .card { background: white; border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        h1 { font-size: 18px; text-align: center; color: #2c3e50; }
         
-        /* 计数器 */
-        .visitor-counter { text-align: center; font-size: 12px; color: #888; margin-bottom: 10px; }
+        /* 姓名输入 */
+        .info-input { width: 100%; padding: 10px; margin-bottom: 10px; border: 2px solid var(--blue); border-radius: 8px; box-sizing: border-box; font-size: 16px; }
+
+        /* 笔画例子 */
+        .stroke-example { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; background: #fff9db; padding: 8px; border-radius: 8px; }
+        .stroke-demo { width: 50px; height: 50px; border: 1px solid #ccc; background: white; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; color: var(--red); }
         
         /* 画板 */
-        .canvas-box { position: relative; border: 2px solid #eee; border-radius: 8px; background: #fff; touch-action: none; width: 100%; aspect-ratio: 1.2/1; }
+        .canvas-box { border: 2px solid #eee; border-radius: 8px; background: #fff; touch-action: none; width: 100%; aspect-ratio: 1.5/1; }
         canvas { width: 100%; height: 100%; }
-        .example-img { display: block; margin: 5px auto; height: 40px; }
-        .btn-clear { background: var(--red); color: white; border: none; padding: 8px 15px; border-radius: 5px; width: 100%; margin-top: 5px; }
+        
+        /* 按钮 */
+        .btn-main { background: var(--green); color: white; border: none; padding: 15px; border-radius: 8px; width: 100%; font-size: 18px; font-weight: bold; margin-top: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .btn-clear { background: #95a5a6; color: white; border: none; padding: 5px 10px; border-radius: 4px; margin-top: 5px; font-size: 12px; }
 
-        /* 月份 */
-        .month-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-        .month { padding: 10px; border: 1px solid #ddd; border-radius: 6px; text-align: center; font-size: 12px; }
+        .month-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
+        .month { border: 1px solid #ddd; padding: 8px; font-size: 11px; text-align: center; border-radius: 5px; }
         .month.active { background: #ffeaa7; border-color: #fdcb6e; }
 
-        /* 数一数填色区 (Page 4) */
-        .choice-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid #eee; }
-        .visual-items { flex-grow: 1; font-size: 18px; letter-spacing: 2px; }
-        .num-option { border: 2px solid #ddd; padding: 5px 12px; border-radius: 5px; cursor: pointer; }
-        .num-option.correct { background: var(--green); color: white; border-color: var(--green); }
-
-        /* 物体清点区 (Page 5) */
-        .insect-box { background: #f9f9f9; padding: 10px; border-radius: 10px; text-align: center; font-size: 24px; line-height: 1.5; letter-spacing: 5px; margin-bottom: 10px; }
-        .input-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; }
-        input[type="number"] { width: 50px; padding: 8px; border: 2px solid var(--blue); border-radius: 5px; text-align: center; }
+        /* 计数练习 */
+        .count-img { font-size: 20px; background: #eee; padding: 10px; border-radius: 8px; letter-spacing: 3px; }
     </style>
 </head>
 <body>
 
-    <div class="visitor-counter">
-        <p>访客计数：</p>
-        <img src="https://profile-counter.glitch.me/PTT1_2026_STUDY/count.svg" alt="Count">
-    </div>
-
-    <h1>MODUL PTT1 SESI 2026</h1>
-
-    <div class="card">
-        <h2>1. 连线与生日月份 [cite: 1, 3]</h2>
-        <p>画出蛋糕并点击圈出你的出生月份：</p>
-        <div class="canvas-box">
-            <canvas id="canvasCake"></canvas>
+    <div id="capture-area">
+        <div class="visitor-counter" style="text-align:center;">
+            <img src="https://profile-counter.glitch.me/PTT1_2026_STUDY/count.svg" alt="Count">
         </div>
-        <button class="btn-clear" onclick="clearC('canvasCake')">清除</button>
 
-        <div class="month-grid" style="margin-top:15px;">
-            <script>
-                const ms = ["Januari 一月", "Februari 二月", "Mac 三月", "April 四月", "Mei 五月", "Jun 六月", "Julai 七月", "Ogos 八月", "September 九月", "Oktober 十月", "November 十一月", "Disember 十二月"];
-                ms.forEach(m => document.write(`<div class="month" onclick="this.classList.toggle('active')">${m}</div>`));
-            </script>
+        <h1>MODUL PTT1 SESI 2026 [cite: 4]</h1>
+
+        <div class="card">
+            <input type="text" class="info-input" placeholder="输入学生姓名 (Nama Student)">
+            <input type="text" class="info-input" placeholder="班级 (Kelas)">
         </div>
-    </div>
 
-    <div class="card">
-        <h2>2. 笔画练习 (写一写) </h2>
-        <p>跟着例子在方格内写一写：</p>
-        
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-            <div>
-                <p>提 (tí) [cite: 8]</p>
-                <div class="canvas-box" style="aspect-ratio:1/1;"><canvas id="c1"></canvas></div>
-                <button class="btn-clear" onclick="clearC('c1')">清除</button>
-            </div>
-            <div>
-                <p>竖钩 (shù gōu) [cite: 10]</p>
-                <div class="canvas-box" style="aspect-ratio:1/1;"><canvas id="c2"></canvas></div>
-                <button class="btn-clear" onclick="clearC('c2')">清除</button>
-            </div>
-            <div>
-                <p>横折 (héng zhé) [cite: 15]</p>
-                <div class="canvas-box" style="aspect-ratio:1/1;"><canvas id="c3"></canvas></div>
-                <button class="btn-clear" onclick="clearC('c3')">清除</button>
-            </div>
-            <div>
-                <p>竖提 (shù tí) [cite: 17]</p>
-                <div class="canvas-box" style="aspect-ratio:1/1;"><canvas id="c4"></canvas></div>
-                <button class="btn-clear" onclick="clearC('c4')">清除</button>
+        <div class="card">
+            <p><strong>1. 连线与生日月份</strong> [cite: 1, 3]</p>
+            <div class="canvas-box" id="boxCake"><canvas id="c_cake"></canvas></div>
+            <button class="btn-clear" onclick="clearC('c_cake')">擦除</button>
+            <div class="month-grid" style="margin-top:10px;">
+                <script>
+                    const ms = ["Jan", "Feb", "Mac", "Apr", "Mei", "Jun", "Jul", "Ogos", "Sep", "Okt", "Nov", "Dis"];
+                    ms.forEach(m => document.write(`<div class="month" onclick="this.classList.toggle('active')">${m}</div>`));
+                </script>
             </div>
         </div>
-    </div>
 
-    <div class="card">
-        <h2>3. 数一数并点选正确答案 </h2>
-        <p>数数有多少，点击正确的数字：</p>
-        
-        <div class="choice-row">
-            <div class="visual-items">⭐⭐⭐⭐</div>
-            <div class="num-option" onclick="this.classList.toggle('correct')">2</div>
-            <div class="num-option" onclick="this.classList.toggle('correct')">4</div>
-        </div>
-        <div class="choice-row">
-            <div class="visual-items">🍎🍎🍎🍎🍎🍎</div>
-            <div class="num-option" onclick="this.classList.toggle('correct')">6</div>
-            <div class="num-option" onclick="this.classList.toggle('correct')">3</div>
-        </div>
-    </div>
+        <div class="card">
+            <p><strong>2. 笔画练习 (跟着例子写)</strong> [cite: 5, 6, 9, 12, 14, 16]</p>
+            
+            <div class="stroke-example">
+                <div class="stroke-demo">提</div>
+                <p>例子 (tí): 向上斜画 [cite: 7, 8, 17]</p>
+            </div>
+            <div class="canvas-box"><canvas id="c_ti"></canvas></div>
+            <button class="btn-clear" onclick="clearC('c_ti')">擦除</button>
 
-    <div class="card">
-        <h2>4. 数一数并写上正确的数字 </h2>
-        <p>看图数一数，把答案填在盒子里：</p>
-        
-        <div class="insect-box">
-            🌸🌸🌸🌸<br>
-            🐦🐦🐦<br>
-            🐌🐌🐌🐌🐌<br>
-            🐰🐰<br>
-            🐞🐞🐞🐞🐞🐞
+            <div class="stroke-example" style="margin-top:15px;">
+                <div class="stroke-demo">亅</div>
+                <p>例子 (shù gōu): 向下再勾 [cite: 10]</p>
+            </div>
+            <div class="canvas-box"><canvas id="c_shugou"></canvas></div>
+            <button class="btn-clear" onclick="clearC('c_shugou')">擦除</button>
+
+            <div class="stroke-example" style="margin-top:15px;">
+                <div class="stroke-demo">ㄱ</div>
+                <p>例子 (héng zhé): 向右再折 [cite: 15]</p>
+            </div>
+            <div class="canvas-box"><canvas id="c_hengzhe"></canvas></div>
+            <button class="btn-clear" onclick="clearC('c_hengzhe')">擦除</button>
         </div>
 
-        <div class="input-row"><span>🌸 鲜花 (Bunga):</span> <input type="number"></div>
-        <div class="input-row"><span>🐦 小鸟 (Burung):</span> <input type="number"></div>
-        <div class="input-row"><span>🐌 蜗牛 (Siput):</span> <input type="number"></div>
-        <div class="input-row"><span>🐰 兔子 (Arnab):</span> <input type="number"></div>
-        <div class="input-row"><span>🐞 瓢虫 (Kumbang):</span> <input type="number"></div>
+        <div class="card">
+            <p><strong>3. 数一数并填写数字</strong> [cite: 19, 22, 23]</p>
+            <div class="count-img">🌸🌸🌸🌸🌸<br>🐰🐰🐰<br>🐞🐞🐞🐞</div>
+            <div style="margin-top:10px;">
+                🌸: <input type="number" style="width:40px;"> 
+                🐰: <input type="number" style="width:40px;"> 
+                🐞: <input type="number" style="width:40px;">
+            </div>
+        </div>
     </div>
+
+    <button class="btn-main" onclick="takeScreenshot()">生成作业照片 (Capture to Image)</button>
+    <p style="text-align:center; color:#888; font-size:12px;">生成后长按保存图片发给老师</p>
+
+    <div id="result-img" style="text-align:center; margin-top:20px;"></div>
 
     <script>
         function setupC(id) {
@@ -147,7 +123,7 @@
                 if(!drawing) return;
                 e.preventDefault();
                 const p = getPos(e);
-                ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.strokeStyle = '#2c3e50';
+                ctx.lineWidth = 4; ctx.lineCap = 'round'; ctx.strokeStyle = '#000';
                 ctx.lineTo(p.x, p.y); ctx.stroke(); ctx.beginPath(); ctx.moveTo(p.x, p.y);
             };
 
@@ -160,7 +136,19 @@
             c.getContext('2d').clearRect(0,0,c.width,c.height);
         }
 
-        ['canvasCake', 'c1', 'c2', 'c3', 'c4'].forEach(setupC);
+        // 截图功能
+        function takeScreenshot() {
+            html2canvas(document.querySelector("#capture-area")).then(canvas => {
+                const img = canvas.toDataURL("image/png");
+                const resultDiv = document.getElementById('result-img');
+                resultDiv.innerHTML = `<h3>生成的作业图 (长按保存):</h3><img src="${img}" style="width:100%; border:2px solid #333;">`;
+                window.scrollTo(0, document.body.scrollHeight);
+            });
+        }
+
+        window.onload = () => {
+            ['c_cake', 'c_ti', 'c_shugou', 'c_hengzhe'].forEach(setupC);
+        };
     </script>
 </body>
 </html>
