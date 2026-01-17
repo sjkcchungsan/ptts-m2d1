@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MODUL PTT1 2026 - 完整修正版</title>
+    <title>MODUL PTT1 2026 (19/1/2026) - 完整修正版</title>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <style>
         :root { --blue: #3498db; --green: #2ecc71; --red: #e74c3c; }
@@ -46,12 +46,12 @@
     </div>
 
     <div class="card">
-        <p><strong>1. 画一画并点选出生月份：</strong></p>
+        <p><strong>1. 画一画并点选出生月份 Lukis kek impian dan pilih bulan kelahiran anda：</strong></p>
         <div class="canvas-box" style="aspect-ratio: 1.6/1;"><canvas id="c_cake"></canvas></div>
-        <button class="btn-clear" onclick="clearC('c_cake')">清除重画</button>
+        <button class="btn-clear" onclick="clearC('c_cake')">清除重画 Reset</button>
         <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:5px; margin-top:10px;">
             <script>
-                const mths = ["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"];
+                const mths = ["一月 Januari","二月 Februari","三月 Mac","四月 April","五月 Mei","六月 Jun","七月 Julai","八月 Ogos","九月 September","十月 Oktober","十一月 November","十二月 Disember"];
                 mths.forEach(m => document.write(`<div style="border:1px solid #eee; font-size:11px; text-align:center; padding:5px; border-radius:4px;" onclick="this.style.background='#ffeaa7'">${m}</div>`));
             </script>
         </div>
@@ -76,7 +76,7 @@
                 <div class="demo-img"><svg class="stroke-svg" viewBox="0 0 100 100"><path d="M20 35 L80 35 L80 80" stroke="#e74c3c" stroke-width="8" fill="none" stroke-linecap="round"/></svg></div>
                 <small>横折 (héng zhé)</small>
                 <div class="canvas-box"><canvas id="c_hz"></canvas></div>
-                <button class="btn-clear" onclick="clearC('c_hz')">擦除</button>
+                <button class="btn-clear" onclick="clearC('c_hz')">擦除 Padam</button>
             </div>
             <div class="stroke-box">
                 <div class="demo-img"><svg class="stroke-svg" viewBox="0 0 100 100"><path d="M35 20 L35 80 L75 50" stroke="#e74c3c" stroke-width="8" fill="none" stroke-linecap="round"/></svg></div>
@@ -88,14 +88,14 @@
     </div>
 
     <div class="card">
-        <p><strong>4. 数一数并点选正确答案：</strong></p>
+        <p><strong>4. 数一数并点选正确答案 Kira dan Pilih Jawapan Betul：</strong></p>
         <div class="count-row"><span>⭐⭐</span><div style="display:flex;gap:10px;"><div class="opt-btn" onclick="act(this)">2</div><div class="opt-btn" onclick="act(this)">3</div></div></div>
         <div class="count-row"><span>🍎🍎🍎🍎🍎🍎</span><div style="display:flex;gap:10px;"><div class="opt-btn" onclick="act(this)">6</div><div class="opt-btn" onclick="act(this)">4</div></div></div>
         <div class="count-row"><span>🐞🐞🐞🐞🐞</span><div style="display:flex;gap:10px;"><div class="opt-btn" onclick="act(this)">7</div><div class="opt-btn" onclick="act(this)">5</div></div></div>
     </div>
 
     <div class="card">
-        <p><strong>5. 数一数并写出数字：</strong></p>
+        <p><strong>5. 数一数并写出数字 Kira dan Tulis Angka Betul：</strong></p>
         <div style="background:#f0f4f8; padding:15px; border-radius:10px; text-align:center; font-size:22px; line-height:2;">
             🌸🌸🌸🌸<br>🐦🐦🐦<br>🐌🐌🐌🐌🐌
         </div>
@@ -107,7 +107,7 @@
     </div>
 </div>
 
-<button class="btn-main" onclick="saveAsImg()">完成作业 (自动保存/下载)</button>
+<button class="btn-main" onclick="saveAsImg()">完成作业 (自动保存/下载) Simpan Sebagai Gambar</button>
 
 <script>
     function setupCanvas(id) {
@@ -150,3 +150,4 @@
 </script>
 </body>
 </html>
+
