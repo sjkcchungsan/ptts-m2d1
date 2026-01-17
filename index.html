@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modul PTT1 Sesi 2026 - Interaktif</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f0f8ff; padding: 20px; line-height: 1.6; }
+        .page { background: white; max-width: 800px; margin: 20px auto; padding: 30px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h2 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+        .grid-months { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 20px; }
+        .month-btn { padding: 15px; border: 2px solid #ddd; border-radius: 8px; cursor: pointer; text-align: center; transition: 0.3s; }
+        .month-btn:hover { background: #e1f5fe; }
+        .month-btn.selected { background: #ffeb3b; border-color: #fbc02d; font-weight: bold; }
+        canvas { border: 2px dashed #999; border-radius: 10px; cursor: crosshair; background: #fff; touch-action: none; }
+        .drawing-area { text-align: center; margin: 20px 0; }
+        .counting-section { margin: 20px 0; }
+        .input-box { width: 50px; padding: 10px; font-size: 18px; text-align: center; border: 2px solid #3498db; border-radius: 5px; }
+        .btn-clear { background: #e74c3c; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 10px; }
+        .lang-tag { font-size: 0.9em; color: #7f8c8d; display: block; }
+    </style>
+</head>
+<body>
+
+    <div class="page">
+        <h2>Muka Surat 1: Bulan Kelahiran</h2>
+        <p>Sambungkan titik (lukis di bawah) dan klik pada bulan kelahiran anda.</p>
+        <span class="lang-tag">画一画，并圈出你生日的月份。</span>
+        
+        <div class="drawing-area">
+            <canvas id="cakeCanvas" width="400" height="300"></canvas><br>
+            <button class="btn-clear" onclick="clearCanvas('cakeCanvas')">Padam Lukisan</button>
+        </div>
+
+        <div class="grid-months" id="monthGrid">
+            <div class="month-btn" onclick="selectMonth(this)">Januari<br>一月</div>
+            <div class="month-btn" onclick="selectMonth(this)">Februari<br>二月</div>
+            <div class="month-btn" onclick="selectMonth(this)">Mac<br>三月</div>
+            <div class="month-btn" onclick="selectMonth(this)">April<br>四月</div>
+            <div class="month-btn" onclick="selectMonth(this)">Mei<br>五月</div>
+            <div class="month-btn" onclick="selectMonth(this)">Jun<br>六月</div>
+            <div class="month-btn" onclick="selectMonth(this)">Julai<br>七月</div>
+            <div class="month-btn" onclick="selectMonth(this)">Ogos<br>八月</div>
+            <div class="month-btn" onclick="selectMonth(this)">September<br>九月</div>
+            <div class="month-btn" onclick="selectMonth(this)">Oktober<br>十月</div>
+            <div class="month-btn" onclick="selectMonth(this)">November<br>十一月</div>
+            <div class="month-btn" onclick="selectMonth(this)">Disember<br>十二月</div>
+        </div>
+    </div>
+
+    <div class="page">
+        <h2>Muka Surat 2 & 3: Latihan Tulisan (Strok)</h2>
+        <p>Gunakan tetikus atau jari untuk melatih tulisan strok berikut:</p>
+        
+        <div class="drawing-area">
+            <h3>1. tí (提) - [cite: 8]</h3>
+            <canvas id="stroke1" width="200" height="200"></canvas><br>
+            <button class="btn-clear" onclick="clearCanvas('stroke1')">Padam</button>
+        </div>
+
+        <div class="drawing-area">
+            <h3>2. shù gōu (竖钩) - [cite: 10]</h3>
+            <canvas id="stroke2" width="200" height="200"></canvas><br>
+            <button class="btn-clear" onclick="clearCanvas('stroke2')">Padam</button>
+        </div>
+    </div>
+
+    <div class="page">
+        <h2>Muka Surat 5: Jom Mengira!</h2>
+        <p>Kira objek dan tulis nombor yang tepat.</p>
+        <span class="lang-tag">数一数并写上正确的数字。 [cite: 23]</span>
+
+        <div class="counting-section">
+            <p>🌸 Bunga: <input type="number" class="input-box" id="q1"> (Tengok gambar dalam modul)</p>
+            <p>🐦 Burung: <input type="number" class="input-box" id="q2"></p>
+            <p>🐌 Siput: <input type="number" class="input-box" id="q3"></p>
+            <p>🐰 Arnab: <input type="number" class="input-box" id="q4"></p>
+            <p>🐞 Kumbang: <input type="number" class="input-box" id="q5"></p>
+            <p>🦋 Rama-rama: <input type="number" class="input-box" id="q6"></p>
+        </div>
+    </div>
+
+    <script>
+        // Fungsi untuk memilih bulan
+        function selectMonth(el) {
+            document.querySelectorAll('.month-btn').forEach(btn => btn.classList.remove('selected'));
+            el.classList.add('selected');
+        }
+
+        // Logik Lukisan (Canvas)
+        function setupCanvas(canvasId) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            let drawing = false;
+
+            function getPos(e) {
+                const rect = canvas.getBoundingClientRect();
+                return {
+                    x: (e.clientX || e.touches[0].clientX) - rect.left,
+                    y: (e.clientY || e.touches[0].clientY) - rect.top
+                };
+            }
+
+            function start(e) { drawing = true; draw(e); }
+            function end() { drawing = false; ctx.beginPath(); }
+            
+            function draw(e) {
+                if (!drawing) return;
+                const pos = getPos(e);
+                ctx.lineWidth = 3;
+                ctx.lineCap = 'round';
+                ctx.strokeStyle = '#2c3e50';
+                ctx.lineTo(pos.x, pos.y);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(pos.x, pos.y);
+            }
+
+            canvas.addEventListener('mousedown', start);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', end);
+            canvas.addEventListener('touchstart', start);
+            canvas.addEventListener('touchmove', draw);
+            canvas.addEventListener('touchend', end);
+        }
+
+        function clearCanvas(id) {
+            const canvas = document.getElementById(id);
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        // Initialize all canvases
+        setupCanvas('cakeCanvas');
+        setupCanvas('stroke1');
+        setupCanvas('stroke2');
+    </script>
+</body>
+</html>
